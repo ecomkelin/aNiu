@@ -1,0 +1,67 @@
+.row.my-4
+	.col-12.text-right
+		button.btn.btn-danger#nofderBtn(type="button") <span class="oi oi-loop-circular"></span>
+		button.btn.btn-info#exitfderBtn(type="button", style="display:none") <span class="oi oi-loop-circular"></span>
+each machin in machins
+	- let btnTime="btn-secondary";
+	if Date.now() - (machin.ctAt).setHours(0, 0, 0, 0) > 3*24*60*60*1000
+		- btnTime="btn-danger";
+	- let fder = new Object(), fderTb="noFder", fderTr="bg-danger";
+	- let fderDidplay="display:none";
+	if machin.fder
+		- fder = machin.fder;
+		- fderTb = "exitFder";
+		- fderTr = "";
+		- fderDidplay = "";
+
+	each macfir in machin.macfirs
+		- let pdfir = macfir.pdfir;
+		table.table.table-bordered.text-center(class=fderTb+" macTab pdfir-"+pdfir._id+" fder-"+fder._id, style=fderDidplay).mt-4
+			tr.bg-light
+				th(colspan=machin.sizes.length+2, width="40%")
+					.row
+						.col-3.pt-2
+							h5 #{pdfir.code}
+						if fder._id
+							-a;
+							.col-3.pt-2
+								a(href="/bsFder/"+fder._id) #{fder.nome}
+						else
+							.col-3.bg-danger
+						.col-2.pt-1
+							a.btn.btn-link(href="/bsMachin/"+machin._id) #{machin.code}
+				th(width="2%")
+				th(colspan=machin.sizes.length+2)
+					.row
+						if machin.fder
+							-a;
+							.col-2.pt-2 生产日期:
+							.col-2.pt-2.text-left #{moment(machin.ctAt).format('MM/DD/YYYY')}
+							.col-4.text-right
+								button.sendBtn.btn(class=btnTime, type="button", id='sendBtn-'+machin._id) 收货
+							.col-4.text-right
+								form(method="post", action="/bsMacChangeSts", enctype="multipart/form-data")
+									input(type="hidden", name="machinId", value=machin._id)
+									input(type="hidden", name="target", value="bsMachinFinish")
+									input.btn.btn-warning(type="submit", value="完成")
+			tr.bg-light
+				th(width="8%") 颜色
+				each size in machin.sizes
+					-a;
+					th #{Conf.sizes[size]}
+				th(width="6%") 合计
+				th.bg-secondary
+				th(width="7%") 颜色
+				each size in machin.sizes
+					-a;
+					th #{Conf.sizes[size]}
+				th(width="6%") 合计
+			form(id="sendForm-"+machin._id, method="post", action="/bsMachinSend", enctype="multipart/form-data")
+				input(type="hidden", name="obj[semi]", value=pdfir.semi)
+				if pdfir.semi == 1
+					-a;
+					include ./list5Semi.pug
+				else
+					include ./list5Comp.pug
+
+script(src="/js/bser/machin/send.js")

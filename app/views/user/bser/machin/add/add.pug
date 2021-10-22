@@ -1,0 +1,57 @@
+.row#needMacBtns
+	each pdfir in products
+		-a;
+		.col-2.ml-3
+			input(type="hidden", id="colors-"+pdfir._id, value=pdfir.selColors)
+			.row
+				.col-9.bg-warning
+					button.btn.btn-warning.btn-block.pneed(type="button", id="clk-"+pdfir._id) #{pdfir.code} &nbsp; | &nbsp;  #{pdfir.needMac}
+				.col-3.bg-secondary.text-center.pt-2.ordsAjax(id="ordsAjax-"+pdfir._id)
+					span <span class="oi oi-chevron-bottom"></span>
+				.col-3.bg-secondary.text-center.pt-2.showOrd(id="showOrd-"+pdfir._id, style="display:none")
+					span <span class="oi oi-chevron-bottom"></span>
+				.col-3.bg-secondary.text-center.pt-2.hideOrd(id="hideOrd-"+pdfir._id, style="display:none")
+					span <span class="oi oi-chevron-top"></span>
+			.ords(id="ords-"+pdfir._id)
+
+form.my-5#machinNew(method="post", action="/bsMacNew", enctype="multipart/form-data")
+	input#objFir(type="hidden", name="obj[pdfirId]")
+	input#objFder(type="hidden", name="obj[fderId]")
+	table.table.table-bordered.text-center#machinProducts
+		tr(class=txtSatus).bg-secondary
+			th(width="20%") 样品型号
+			th(width="10%") 工厂名称
+			th(width="5%")
+			- let isize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd
+				- isize ++;
+				if isize > Conf.extSize.max
+					- break;
+			th#changeTh
+				button.btn.btn-success#submitBtn(type="button") 确认
+		tr#changeElem
+			td
+				#pdcode
+				#ajaxPdsForm.input-group
+					input#ajaxPdsCode.productcode.form-control(type="number", placeholder='模特编号', autocomplete="off")
+				#prodPage
+			td
+				#fderBtn
+				#formFders
+					input#ajaxFders.form-control(type="text", placeholder='工厂名称或编号', autocomplete="off")
+				.fdersAjax
+			th.bg-success
+				input.iptsty.addColor(type="text")
+			- let jsize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd #{Conf.sizes[jsize]}
+				- jsize ++;
+				if jsize > Conf.extSize.max
+					- break;
+			th#changeSize
+
+script(src="/js/bser/machin/fder.js")
+script(src="/js/bser/machin/pdsAjax.js")

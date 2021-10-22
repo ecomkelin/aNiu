@@ -1,0 +1,77 @@
+extends ../../aalayout/layout
+
+block content
+	div(style="height:50px")
+	.container
+		input#pdfir(type="hidden", value=pdfir)
+	.mx-5
+		.row
+			.col-sm-2.mt-5
+				include ./basic0Info
+				
+			.col-sm-6.mt-5.tblDial(style="display:block")
+				table.table
+					tr
+						td(width="18%") 颜色
+						each size in pdfir.sizes
+							-a;
+							td #{Conf.sizes[size]}
+					each pdsec in pdfir.pdsecs
+						-a;
+						tr
+							td #{pdsec.color}
+							each pdthd in pdsec.pdthds
+								-let quotOthd = shipOthd = lessOthd = 0;
+								-let quotMthd = shipMthd = lessMthd = 0;
+								each ordthd in pdthd.ordthds
+									-quotOthd+=parseInt(ordthd.quot);
+									-shipOthd+=parseInt(ordthd.ship);
+									if parseInt(ordthd.quot) > parseInt(ordthd.ship)
+										- lessOthd += parseInt(ordthd.quot) - parseInt(ordthd.ship);
+								each macthd in pdthd.macthds
+									-quotMthd+=parseInt(macthd.quot);
+									-shipMthd+=parseInt(macthd.ship);
+									if parseInt(macthd.quot) > parseInt(macthd.ship)
+										- lessMthd += parseInt(macthd.quot) - parseInt(macthd.ship);
+								- let needMac=quotOthd - pdthd.stock - quotMthd;
+								- let showThdStock = parseInt(pdthd.stock) + shipMthd - shipOthd;
+								td
+									include ./tdCont0
+				.option.mt-5(style="display:none")
+					include ./option
+			.col-md-4.text-center
+				include ./pdimg
+		.row.mt-5
+			//- h2 hordthd
+			each hordfir in pdfir.hordfirs
+				-a;
+				//- .col-12 #{hordfir}
+	.topNav-second.p-1
+		.row.pt-1
+			.col-1
+				a.btn.btn-info.btn-block(href="/bsProducts") <span class="oi oi-arrow-thick-left"></span>
+			.col-1
+				a.btn.btn-warning.btn-block(href="/bsProductAdd") <span class="oi oi-plus"></span>
+			.col-6.text-center
+				button.pdNav#stock.btn.btn-primary(type="button") 库存
+				span &nbsp;
+				//- button.pdNav#reserve.btn.btn-default(type="button") 屯货
+				span &nbsp;
+				button.pdNav#order.btn.btn-default(type="button") 订量
+				span &nbsp;
+				button.pdNav#needM.btn.btn-default(type="button") 需产
+				span &nbsp;
+				button.pdNav#machin.btn.btn-default(type="button") 在产
+				span &nbsp; &nbsp;
+				button#option.btn.btn-warning(type="button") <span class="oi oi-cog"></span>
+				span &nbsp; &nbsp;
+				button.btn.btn-warning#editStockBtn.pdNav(type="button") <span class="oi oi-pencil"></span> 
+				button.btn.btn-info#fnStockBtn.pdNav(type="button", style="display:none") <span class="oi oi-browser"></span>
+			.col-4
+				form.ajaxForm
+					input.ajaxKey.productcode.form-control(type="text", autocomplete="off")
+	script(src="/const/const.js")
+	script(src="/js/bser/product/detail/update.js")
+	script(src="/js/bser/product/detail/detail.js")
+	script(src="/js/bser/product/detail/option.js")
+	script(src="/js/bser/product/detail/pdImg.js")

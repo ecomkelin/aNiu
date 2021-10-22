@@ -1,0 +1,35 @@
+extends ../aalayout/layout
+
+block content
+	div(style="height:50px")
+
+	input#products(type="hidden", value=products)
+	.container
+	.row.m-5
+		each pdfir in products
+			-a;
+			.col-md-1.text-right.mt-4.pdfir(class="pdfir-"+pdfir.code)
+				h3: a(href="/bsProduct/"+pdfir._id) #{pdfir.code}
+				if pdfir.semi == 1
+					-a;
+					h5.text-warning 半成品
+				h5 #{pdfir.nome}
+				//- p Mat:#{pdfir.material} 
+				p Note:#{pdfir.note} 
+			.col-md-1.mt-4.pdfir(class="pdfir-"+pdfir.code)
+				h2: a(href="/bsProduct/"+pdfir._id)
+					img(src=pdfir.photo, width="80px")
+	.topNav-second.p-1
+		.row.pt-1
+			//- .col-1
+			//- 	button.btn.btn-info.shield(type="button") <span class="oi oi-shield"></span>
+			.col-2
+				a.btn.btn-warning.btn-block(href="/bsProductAdd") <span class="oi oi-plus"></span>
+			.col-5.text-center
+			.col-1
+				a.btn.btn-info#showDialBtn(href="/bsProductAll") <span class="oi oi-dial"></span>
+				button.btn.btn-secondary#hideDialBtn(type="button", style="display:none") <span class="oi oi-dial"></span>
+			.col-4#pdCode
+				input#iptCode.form-control(type="text", autocomplete="off", placeholder="模特号码")
+	script(src="/const/const.js")
+	script(src="/js/bser/product/list.js")

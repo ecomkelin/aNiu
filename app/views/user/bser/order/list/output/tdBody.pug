@@ -1,0 +1,65 @@
+- let ctotship = 0;
+each size in order.sizes
+	- let taskOrdthd = null;
+	- let taskPdthd = null;
+	- let showThdStock = '';
+	each ordthd in ordsec.ordthds
+		if ordthd.size == size
+			- taskOrdthd = ordthd;
+			- break;
+	if taskOrdthd
+		- taskPdthd = taskOrdthd.pdthd;
+		- let ordsquot = macsquot = tinsquot = 0;
+		- showThdStock = parseInt(taskPdthd.stock);
+		each ordthd in taskPdthd.ordthds
+			- ordsquot += parseInt(ordthd.quot) - parseInt(ordthd.ship);
+			- showThdStock -= parseInt(ordthd.ship);
+		each macthd in taskPdthd.macthds
+			- macsquot += parseInt(macthd.quot) - parseInt(macthd.ship);
+			- showThdStock += parseInt(macthd.ship);
+		each tinthd in taskPdthd.tinthds
+			- tinsquot += parseInt(tinthd.quot) - parseInt(tinthd.ship);
+			- showThdStock += parseInt(tinthd.ship);
+	else
+		each pdthd in pdsec.pdthds
+			if pdthd.size == size
+				- taskPdthd = pdthd;
+				- break;
+
+	if taskOrdthd
+		- let ship = parseInt(taskOrdthd.ship);
+		- ctotship += (taskOrdthd.ship);
+		- totship += (taskOrdthd.ship);
+		- let less = parseInt(taskOrdthd.quot) - ship;
+		- let shiping;
+		if less < showThdStock
+			- shiping = less;
+		else
+			- shiping = showThdStock;
+		- k++;
+		td
+			if less > 0
+				-a;
+				.row
+					.col-3.pt-1
+						span.text-info #{ship}
+					.col-9
+						input.iptsty2.shiping(id="shiping-"+taskOrdthd._id, type="number", name="obj[thds]["+k+"][shiping]", value=shiping)
+						input(id="stock-"+taskOrdthd._id, type="hidden", value=showThdStock)
+						input(type="hidden", name="obj[thds]["+k+"][stock]", value=showThdStock)
+						input(type="hidden", name="obj[thds]["+k+"][ordthdId]", value=taskOrdthd._id)
+						input(type="hidden", name="obj[thds]["+k+"][shiped]", value=taskOrdthd.ship)
+				.row
+					.col-5.text-left
+						span.text-warning #{showThdStock}
+					.col-6.text-right
+						if macsquot != 0
+							-a;
+							span.text-success #{macsquot} 
+						else 
+							span.text-success #{tinsquot}
+			else
+				span.text-info #{ship}
+	else
+		td
+td.text-success #{ctotship}

@@ -1,0 +1,45 @@
+.row#needTinBtns
+	each pdfir in products
+		-a;
+		.col-2: button.btn.btn-warning.btn-block.pneed(type="button", id="clk-"+pdfir._id)
+			span #{pdfir.code} &nbsp; | &nbsp;  #{pdfir.canTin}/#{pdfir.needTin}
+		input(type="hidden", id="colors-"+pdfir._id, value=pdfir.selColors)
+form#tintNew(method="post", action="/bsTinNew", enctype="multipart/form-data")
+	input#objFir(type="hidden", name="obj[pdfirId]")
+	input#objTner(type="hidden", name="obj[tnerId]")
+	table.table.table-bordered.text-center#tintProducts.my-5
+		tr(class=txtSatus).bg-secondary
+			th(width="20%") 样品型号
+			th(width="10%") 染洗厂名称
+			th(width="5%")
+			- let isize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd
+				- isize ++;
+				if isize > Conf.extSize.max
+					- break;
+			th#changeTh
+				button.btn.btn-success#submitBtn(type="button") 确认
+		tr#changeElem
+			td
+				#pdcode
+				#ajaxPdsForm.input-group
+					input#ajaxPdsCode.productcode.form-control(type="number", placeholder='模特编号', autocomplete="off")
+				#prodPage
+			td
+				#tnerBtn
+				#formTners
+					input#ajaxTners.form-control(type="text", placeholder='染洗厂名称或编号', autocomplete="off")
+				.catersAjax
+			th.bg-success
+				input.iptsty.addColor(type="text")
+			- let jsize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd #{Conf.sizes[jsize]}
+				- jsize ++;
+				if jsize > Conf.extSize.max
+					- break;
+			th#changeSize
+		tr.changeElem

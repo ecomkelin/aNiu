@@ -1,0 +1,41 @@
+form.my-5#orderNew(method="post", action="/bsOrdNew", enctype="multipart/form-data")
+	input#objFir(type="hidden", name="obj[pdfirId]")
+	input#objCter(type="hidden", name="obj[cterId]")
+	table.table.table-bordered.text-center#orderProducts
+		tr(class=txtSatus).bg-secondary
+			th(width="15%") 样品型号
+			th(width="10%") 客户名称
+			th(width="5%")
+			- let isize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd
+				- isize ++;
+				if isize > Conf.extSize.max
+					- break;
+			th#changeTh
+				button.btn.btn-success#submitBtn(type="button") 确认
+		tr#changeElem
+			td
+				#pdcode
+				#ajaxPdsForm.input-group
+					input#ajaxPdsCode.productcode.form-control(type="number", placeholder='模特编号', autocomplete="off")
+				#prodPage
+			td
+				#cterBtn
+				#formCters
+					input#ajaxCters.form-control(type="text", placeholder='客户名称或编号', autocomplete="off")
+				.ctersAjax
+			th.bg-success
+				input.iptsty.addColor(type="text")
+			- let jsize = Conf.extSize.min;
+			each size in Conf.sizes
+				-a;
+				th.changeTd #{Conf.sizes[jsize]}
+				- jsize ++;
+				if jsize > Conf.extSize.max
+					- break;
+			th#changeSize
+
+script(src="/js/bser/order/cter.js")
+script(src="/js/bser/order/pdsAjax.js")

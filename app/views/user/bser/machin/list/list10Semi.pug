@@ -1,0 +1,38 @@
+tr
+	th.bg-light 半成品
+	- let ctotquot = 0;
+	each size in machin.sizes
+		-let less = '';
+		-let quot = '';
+		each macsez in macfir.macsezs
+			if macsez.size == size
+				- quot = parseInt(macsez.quot);
+				- ctotquot += quot;
+				- less = parseInt(macsez.quot) - parseInt(macsez.ship);
+				- break;
+		td
+			if less == 0
+				-a;
+				span #{quot}
+			else
+				span.text-info #{quot}
+	td.text-success #{ctotquot}
+	td.bg-secondary
+	th.bg-light 半成品
+	- let ctotship = 0;
+	each size in machin.sizes
+		-let less = '';
+		-let ship = '';
+		each macsez in macfir.macsezs
+			if macsez.size == size
+				- ship = parseInt(macsez.ship);
+				- less = parseInt(macsez.quot) - ship;
+				- ctotship += ship;
+				- break;
+		td 
+			if less == 0
+				-a;
+				span #{ship}
+			else
+				span.text-info #{ship}
+	td.text-success #{ctotship}
